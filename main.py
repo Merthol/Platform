@@ -19,9 +19,10 @@ class Main:
         self.game.update()
     
     def events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        for events in pygame.event.get():
+            if events.type == pygame.QUIT:
                 self.loop = False
+            self.game.player.events(events)
     
     def update(self):
         while self.loop:
