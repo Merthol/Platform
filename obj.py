@@ -16,12 +16,17 @@ class Hero(Obj):
     def __init__(self, image, x, y, *groups):
         super().__init__(image, x, y, *groups)
         
-        self.vel = 4
+        self.vel = 20
         self.grav = 1
         
         self.rigth = False
         self.left = False
         self.jump = False
+        
+        self.direction = False
+        
+        self.ticks = 0
+        self.img_count = 0
         
     def update(self):
         self.gravity()
@@ -31,8 +36,8 @@ class Hero(Obj):
         self.vel += self.grav
         self.rect[1] += self.vel
         
-        if self.vel >= 10:
-            self.vel = 10
+        if self.vel >= 20:
+            self.vel = 20
     
     def colisions(self, group, kill):
         col = pygame.sprite.spritecollide(self, group, kill)
@@ -44,23 +49,44 @@ class Hero(Obj):
         if events.type == pygame.KEYDOWN:
             if events.key == pygame.K_d:
                 self.rigth = True
-                print("Direita")
             elif events.key == pygame.K_a:
                 self.left = True
-                print("Esquerda")
-            if events.key == pygame.K_SPACE:
-                # self.jump = True
-                self.vel *= -1
+            if events.key == pygame.K_SPACE and self.vel == 20:
+                # self.vel *= -1
+                self.jump = True
         if events.type == pygame.KEYUP:
             if events.key == pygame.K_d:
                 self.rigth = False
             elif events.key == pygame.K_a:
                 self.left = False
-            # if events.key == pygame.K_SPACE:
-            #     self.jump = False
     
     def moviments(self):
         if self.rigth:
             self.rect[0] += 8
+            self.anim("walk", 4, 4)
+            self.direction = False
         elif self.left:
             self.rect[0] -= 8
+            self.anim("walk", 4, 4)
+            self.direction = True
+        else:
+            self.anim("idle", 4, 4)
+        if self.jump or self.vel < 20:
+            self.anim("jump", 4, 0)
+        if self.jump and self.vel == 20:
+            self.vel *= -1
+            self.jump = False
+        self.image = pygame.transform.flip(self.image, self.direction, False)
+    
+    def anim(self, name, ticks, limit):
+        self.ticks += 1
+        if self.ticks >= ticks:
+            self.ticks = 0
+            self.img_count += 1
+        if self.img_count >= limit:
+            self.img_count = 0
+        
+        if limit == 0:
+            self.image = pygame.image.load(f"assets/{name}.png")
+        else:
+            self.image = pygame.image.load(f"assets/{name}{self.img_count}.png")
