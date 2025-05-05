@@ -16,7 +16,8 @@ class Hero(Obj):
     def __init__(self, image, x, y, *groups):
         super().__init__(image, x, y, *groups)
         
-        self.vel = 20
+        self.max_vel = 15
+        self.vel = self.max_vel
         self.grav = 1
         
         self.rigth = False
@@ -28,6 +29,10 @@ class Hero(Obj):
         self.ticks = 0
         self.img_count = 0
         
+        self.colections = 0
+        
+        self.lifes = 3
+        
     def update(self):
         self.gravity()
         self.moviments()
@@ -36,14 +41,24 @@ class Hero(Obj):
         self.vel += self.grav
         self.rect[1] += self.vel
         
-        if self.vel >= 20:
-            self.vel = 20
+        if self.vel >= self.max_vel:
+            self.vel = self.max_vel
     
-    def colisions(self, group, kill):
+    def colisions(self, group, kill, name):
         col = pygame.sprite.spritecollide(self, group, kill)
         
-        if col:
+        if col and name == "platform":
             self.rect.bottom = col[0].rect.top
+        if col and name == "crystal":
+            self.colections += 1
+        if col and name == "enemy":
+            if self.rect.bottom - 10 == col[0].rect.top:
+                self.vel *= -1
+                col[0].kill()
+            else:
+                self.rect[0] -= 30
+                self.lifes -= 1
+                col[0].kill()
     
     def events(self, events):
         if events.type == pygame.KEYDOWN:
@@ -51,7 +66,7 @@ class Hero(Obj):
                 self.rigth = True
             elif events.key == pygame.K_a:
                 self.left = True
-            if events.key == pygame.K_SPACE and self.vel == 20:
+            if events.key == pygame.K_SPACE and self.vel == self.max_vel:
                 # self.vel *= -1
                 self.jump = True
         if events.type == pygame.KEYUP:
@@ -71,9 +86,9 @@ class Hero(Obj):
             self.direction = True
         else:
             self.anim("idle", 4, 4)
-        if self.jump or self.vel < 20:
+        if self.jump or self.vel < self.max_vel:
             self.anim("jump", 4, 0)
-        if self.jump and self.vel == 20:
+        if self.jump and self.vel == self.max_vel:
             self.vel *= -1
             self.jump = False
         self.image = pygame.transform.flip(self.image, self.direction, False)

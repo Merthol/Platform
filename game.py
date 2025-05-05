@@ -21,11 +21,11 @@ class Game:
         self.plat2 = Obj("assets/plat3.png", 430, 550, self.all_sprites, self.plataforms)
         self.plat3 = Obj("assets/plat2.png", 1080, 550, self.all_sprites, self.plataforms)
         
-        self.crystal1 = Obj("assets/crystal.png", 520, 400, self.all_sprites, self.crystals)
-        self.crystal2 = Obj("assets/crystal.png", 870, 400, self.all_sprites, self.crystals)
-        self.crystal3 = Obj("assets/crystal.png", 1160, 400, self.all_sprites, self.crystals)
+        self.crystal1 = Obj("assets/crystal.png", 520, 300, self.all_sprites, self.crystals)
+        self.crystal2 = Obj("assets/crystal.png", 870, 300, self.all_sprites, self.crystals)
+        self.crystal3 = Obj("assets/crystal.png", 1160, 300, self.all_sprites, self.crystals)
         
-        self.enemy1 = Obj("assets/enemy0.png", 520, 501, self.all_sprites)
+        self.enemy1 = Obj("assets/enemy0.png", 520, 501, self.all_sprites, self.enemys)
         
         self.player = Hero("assets/idle0.png", 100, 450, self.all_sprites)
         
@@ -36,4 +36,6 @@ class Game:
     
     def update(self):
         self.all_sprites.update()
-        self.player.colisions(self.plataforms, False)
+        self.player.colisions(self.plataforms, False, "platform")
+        self.player.colisions(self.crystals, True, "crystal")
+        self.player.colisions(self.enemys, False, "enemy")
