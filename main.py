@@ -16,6 +16,7 @@ class Main:
         
     def draw(self):
         self.game.draw(self.window)
+        self.game.update()
     
     def events(self):
         for event in pygame.event.get():

@@ -27,7 +27,7 @@ class Game:
         
         self.enemy1 = Obj("assets/enemy0.png", 520, 501, self.all_sprites)
         
-        self.player = Obj("assets/idle0.png", 100, 450, self.all_sprites)
+        self.player = Hero("assets/idle0.png", 100, 250, self.all_sprites)
         
         self.hud = Obj("assets/hud.png", 50, 50, self.all_sprites)
         
@@ -36,3 +36,4 @@ class Game:
     
     def update(self):
         self.all_sprites.update()
+        self.player.colisions(self.plataforms, False)
