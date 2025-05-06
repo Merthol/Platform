@@ -59,7 +59,7 @@ class Game:
             life1 = Obj("assets/icon_head.png", 140, 81, self.all_sprites)
             life2 = Obj("assets/icon_head.png", 177, 81, self.all_sprites)
             life3 = Obj("assets/icon_dead.png", 214, 81, self.all_sprites)
-        if self.player.lifes == 1:
+        elif self.player.lifes == 1:
             life1 = Obj("assets/icon_head.png", 140, 81, self.all_sprites)
             life2 = Obj("assets/icon_dead.png", 177, 81, self.all_sprites)
             life3 = Obj("assets/icon_dead.png", 214, 81, self.all_sprites)

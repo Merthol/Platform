@@ -8,8 +8,8 @@ class Obj(pygame.sprite.Sprite):
         self.image = pygame.image.load(image)
         
         self.rect = self.image.get_rect()
-        self.rect[0] = x
-        self.rect[1] = y
+        self.rect.x = x
+        self.rect.y = y
         
         self.ticks = 0
         self.img_count = 0
@@ -52,7 +52,7 @@ class Hero(Obj):
     
     def gravity(self):
         self.vel += self.grav
-        self.rect[1] += self.vel
+        self.rect.y += self.vel
         
         if self.vel >= self.max_vel:
             self.vel = self.max_vel
@@ -61,7 +61,10 @@ class Hero(Obj):
         col = pygame.sprite.spritecollide(self, group, kill)
         
         if col and name == "platform":
-            self.rect.bottom = col[0].rect.top
+            if self.rect.bottom - 30 <= col[0].rect.top:
+                if self.rect.left + 30 <= col[0].rect.right:
+                    if self.rect.right - 30 >= col[0].rect.left:
+                        self.rect.bottom = col[0].rect.top
         if col and name == "crystal":
             self.colections += 1
         if col and name == "enemy":
@@ -69,9 +72,14 @@ class Hero(Obj):
                 self.vel *= -1
                 col[0].kill()
             else:
-                self.rect[0] -= 30
+                self.rect.x -= 30
                 self.lifes -= 1
                 col[0].kill()
+        if self.rect.y >= 720:
+            self.lifes -= 1
+            self.rect.x = 100
+            self.rect.y = 450
+            self.vel = self.max_vel
     
     def events(self, events):
         if events.type == pygame.KEYDOWN:
@@ -79,7 +87,7 @@ class Hero(Obj):
                 self.rigth = True
             elif events.key == pygame.K_a:
                 self.left = True
-            if events.key == pygame.K_SPACE and self.vel == self.max_vel:
+            if events.key == pygame.K_SPACE and self.vel == self.max_vel and self.rect.bottom - 30 <= 550:
                 # self.vel *= -1
                 self.jump = True
         if events.type == pygame.KEYUP:
@@ -90,11 +98,11 @@ class Hero(Obj):
     
     def moviments(self):
         if self.rigth:
-            self.rect[0] += 8
+            self.rect.x += 8
             self.anim("walk", 4, 4)
             self.direction = False
         elif self.left:
-            self.rect[0] -= 8
+            self.rect.x -= 8
             self.anim("walk", 4, 4)
             self.direction = True
         else:
