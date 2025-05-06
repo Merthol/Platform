@@ -117,6 +117,7 @@ class Hero(Obj):
                 self.rect.x = 100
                 self.rect.y = 450
             else:
+                self.lifes -= 1
                 self.kill()
 
 

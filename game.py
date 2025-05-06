@@ -42,6 +42,7 @@ class Game:
         self.player.colisions(self.crystals, True, "crystal")
         self.player.colisions(self.enemys, False, "enemy")
         self.HUD()
+        self.gameover()
     
     def HUD(self):
         if self.player.colections == 1:
@@ -50,7 +51,7 @@ class Game:
             crystal = Obj("assets/icon_crystal.png", 160, 126, self.all_sprites)
         elif self.player.colections == 3:
             crystal = Obj("assets/icon_crystal.png", 185, 126, self.all_sprites)
-            
+        
         if self.player.lifes == 3:
             life1 = Obj("assets/icon_head.png", 140, 81, self.all_sprites)
             life2 = Obj("assets/icon_head.png", 177, 81, self.all_sprites)
@@ -63,8 +64,15 @@ class Game:
             life1 = Obj("assets/icon_head.png", 140, 81, self.all_sprites)
             life2 = Obj("assets/icon_dead.png", 177, 81, self.all_sprites)
             life3 = Obj("assets/icon_dead.png", 214, 81, self.all_sprites)
-        else:
+        elif self.player.lifes == 0:
             life1 = Obj("assets/icon_dead.png", 140, 81, self.all_sprites)
             life2 = Obj("assets/icon_dead.png", 177, 81, self.all_sprites)
             life3 = Obj("assets/icon_dead.png", 214, 81, self.all_sprites)
-            print("Game Over")
+    
+    def gameover(self):
+        if self.player.lifes < 0:
+            self.player.kill()
+            self.crystals.empty()
+            self.enemys.empty()
+        
+            self.bg = Obj("assets/game_over.png", 365, 170, self.all_sprites)
