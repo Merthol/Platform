@@ -49,6 +49,7 @@ class Hero(Obj):
     def update(self):
         self.gravity()
         self.moviments()
+        self.drop()
     
     def gravity(self):
         self.vel += self.grav
@@ -75,11 +76,6 @@ class Hero(Obj):
                 self.rect.x -= 30
                 self.lifes -= 1
                 col[0].kill()
-        if self.rect.y >= 720:
-            self.lifes -= 1
-            self.rect.x = 100
-            self.rect.y = 450
-            self.vel = self.max_vel
     
     def events(self, events):
         if events.type == pygame.KEYDOWN:
@@ -113,6 +109,15 @@ class Hero(Obj):
             self.vel *= -1
             self.jump = False
         self.image = pygame.transform.flip(self.image, self.direction, False)
+    
+    def drop(self):
+        if self.rect.y > 720:
+            if self.lifes > 0:
+                self.lifes -= 1
+                self.rect.x = 100
+                self.rect.y = 450
+            else:
+                self.kill()
 
 
 class Enemy(Obj):
