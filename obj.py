@@ -10,6 +10,22 @@ class Obj(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect[0] = x
         self.rect[1] = y
+        
+        self.ticks = 0
+        self.img_count = 0
+    
+    def anim(self, name, ticks, limit):
+        self.ticks += 1
+        if self.ticks >= ticks:
+            self.ticks = 0
+            self.img_count += 1
+        if self.img_count >= limit:
+            self.img_count = 0
+        
+        if limit == 0:
+            self.image = pygame.image.load(f"assets/{name}.png")
+        else:
+            self.image = pygame.image.load(f"assets/{name}{self.img_count}.png")
 
 
 class Hero(Obj):
@@ -25,9 +41,6 @@ class Hero(Obj):
         self.jump = False
         
         self.direction = False
-        
-        self.ticks = 0
-        self.img_count = 0
         
         self.colections = 0
         
@@ -92,16 +105,11 @@ class Hero(Obj):
             self.vel *= -1
             self.jump = False
         self.image = pygame.transform.flip(self.image, self.direction, False)
+
+
+class Enemy(Obj):
+    def __init__(self, image, x, y, *groups):
+        super().__init__(image, x, y, *groups)
     
-    def anim(self, name, ticks, limit):
-        self.ticks += 1
-        if self.ticks >= ticks:
-            self.ticks = 0
-            self.img_count += 1
-        if self.img_count >= limit:
-            self.img_count = 0
-        
-        if limit == 0:
-            self.image = pygame.image.load(f"assets/{name}.png")
-        else:
-            self.image = pygame.image.load(f"assets/{name}{self.img_count}.png")
+    def update(self):
+        self.anim("enemy", 4, 4)

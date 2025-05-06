@@ -25,7 +25,7 @@ class Game:
         self.crystal2 = Obj("assets/crystal.png", 870, 300, self.all_sprites, self.crystals)
         self.crystal3 = Obj("assets/crystal.png", 1160, 300, self.all_sprites, self.crystals)
         
-        self.enemy1 = Obj("assets/enemy0.png", 520, 501, self.all_sprites, self.enemys)
+        self.enemy1 = Enemy("assets/enemy0.png", 520, 501, self.all_sprites, self.enemys)
         
         self.player = Hero("assets/idle0.png", 100, 450, self.all_sprites)
         
